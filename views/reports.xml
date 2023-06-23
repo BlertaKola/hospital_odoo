@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hospital_reports_form" model="ir.ui.view">
+        <field name="name">hospital.report.form</field>
+        <field name="model">hospital.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="name"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="patient_id"/>
+                        <field name="age"/>
+                        <field name="doctor_ids"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_hospital_reports_tree" model="ir.ui.view">
+        <field name="name">hospital.report.tree</field>
+        <field name="model">hospital.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+
+        </field>
+    </record>
+
+    <record id="action_hospital_report" model="ir.actions.act_window">
+        <field name="name">Medical Reports</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.report</field>
+        <field name="view_mode">tree,form</field>
+
+    </record>
+
+    <menuitem name="Medical Reports"
+              id="menu_reports"
+              parent="menu_hospital_details"
+              action="action_hospital_report"
+              sequence="10"
+    />
+
+</odoo>

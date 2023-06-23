@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="meeting_form_view" model="ir.ui.view">
+            <field name="name">hospital.meeting.form</field>
+            <field name="model">hospital.meeting</field>
+            <field name="arch" type="xml">
+                <form string="ModelTitle">
+                    <header>
+                        <button name="action_in_progress" type="object" string="In Progress" states='draft' class="oe_highlight"/>
+                        <button name="action_done" type="object" string="Mark as Done" states='in_progres' class="oe_highlight"/>
+                        <button name="action_cancel" type="object" string="Cancel" states='draft,in_progres' class="oe_highlight"/>
+                        <button name="action_draft" type="object" string="Reset to Draft" states='cancel' class="oe_highlight"/>
+                        <field name="state" widget="statusbar" nolabel="1"
+                               statusbar_visible="draft,in_progres,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="priority" widget="priority"/>
+                            </h1>
+                        </div>
+                        <div class="oe_title">
+                            <div>
+                                <label for="name"/>
+                            </div>
+                            <h2>
+                                <field name="name" placeholder="e.g. Consultation"/>
+                            </h2>
+                        </div>
+                        <notebook>
+                            <page name="page_details" string="Meeting Details">
+                                <group>
+                                    <group>
+                                        <field name="patient_id"/>
+                                        <field name="doctor_id"/>
+                                        <field name="starting_time" string="Starting at"/>
+                                        <field name="ending_time" string="Ending at"/>
+                                        <label for="duration"/>
+                                        <div>
+                                            <field name="duration" widget="float_time" class="oe_inline"
+                                                   attrs="{'readonly': [('id','!=', False)]}"/>
+                                            <span>hours</span>
+                                        </div>
+                                    </group>
+                                    <group>
+                                        <field name="doc_room" attrs="{'invisible': [('doctor_id', '=', False)]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="meeting_tree_view" model="ir.ui.view">
+            <field name="name">hospital.meeting.tree</field>
+            <field name="model">hospital.meeting</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="doc_room"/>
+                    <field name="priority"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        <record id="meeting_search_view" model="ir.ui.view">-->
+        <!--            <field name="name">ProjectName.meeting.search</field>-->
+        <!--            <field name="model">ProjectName.meeting</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <search string="ModelTitle">-->
+        <!--                    <group expand="1" string="Group By">-->
+        <!--                        <filter string="Example Field" name="example_field" domain="[]"-->
+        <!--                                context="{'group_by':'example_field'}"/>-->
+        <!--                    </group>-->
+        <!--                </search>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <record id="action_hospital_meetings" model="ir.actions.act_window">
+            <field name="name">Appointments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.meeting</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Appointments" id="meeting_menu"
+                  parent="menu_hospital_medications"
+                  action="action_hospital_meetings"
+                  sequence="10"
+        />
+
+    </data>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_hospital_prescriptions_form" model="ir.ui.view">
+            <field name="name">hospital.diagnosis.form</field>
+            <field name="model">hospital.diagnosis</field>
+            <field name="arch" type="xml">
+                <form string="Diagnosis">
+                    <sheet>
+                        <group>
+                            <field name="date"/>
+                            <field name="patient_id"/>
+                            <field name="description"/>
+                            <field name="dietary_restrictions"/>
+                            <field name="medication_restrictions"/>
+                            <field name="doctor_id"/>
+                            <field name="done"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="diagnosis_tree_view" model="ir.ui.view">
+            <field name="name">hospital.diagnosis.tree</field>
+            <field name="model">hospital.diagnosis</field>
+            <field name="arch" type="xml">
+                <tree string="Diagnosis">
+                    <field name="patient_id"/>
+                    <field name="date"/>
+                    <field name="doctor_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hospital_diagnosis" model="ir.actions.act_window">
+            <field name="name">Diagnosis</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.diagnosis</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Medical Diagnosis"
+              id="menu_diagnosis"
+              parent="menu_hospital_details"
+              action="action_hospital_diagnosis"
+              sequence="10"
+    />
+    </data>
+</odoo>

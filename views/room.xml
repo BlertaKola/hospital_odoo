@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_hospital_rooms_form" model="ir.ui.view">
+            <field name="name">hospital.room.form</field>
+            <field name="model">hospital.room</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="floor_location"/>
+                            <field name="room_type"/>
+                            <!--                            <field name="assigned_to" widget="selection"/>-->
+                            <field name="capacity" attrs="{'invisible': [('room_type', '!=', 'patient_room')]}"/>
+                            <field name="facilities" attrs="{'invisible': [('room_type', '!=', 'patient_room')]}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+
+            </field>
+        </record>
+        <record id="view_hospital_rooms_tree" model="ir.ui.view">
+            <field name="name">hospital.room.tree</field>
+            <field name="model">hospital.room</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="floor_location"/>
+                    <field name="room_type"/>
+                    <field name="capacity"
+                           attrs="{'invisible': [('room_type', '=', 'doctor_room')]}"
+                    />
+                    <field name="status"
+                           attrs="{'invisible': [('room_type', '=', 'doctor_room')]}"
+                           decoration-warning="status == 'full'"
+                           decoration-info="status == 'occupied'"
+                           decoration-success="status == 'available'"
+                           widget="badge" optional="show"/>
+
+                    <field name="occupancy" attrs="{'invisible': [('room_type', '=', 'doctor_room')]}"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_hospital_rooms_search" model="ir.ui.view">
+            <field name="name">hospital.room.search</field>
+            <field name="model">hospital.room</field>
+            <field name="arch" type="xml">
+                <search>
+<!--                    <field name="ref"/>-->
+                    <field name="name" string="Room Number"
+                           filter_domain="['|', ('name','ilike', self), ('ref', 'ilike', self)]"/>
+                    <filter name="filter_doctor_rooms" string="Doctor Rooms" domain="[('room_type', '=', 'doctor_room')]"/>
+                    <filter name="filter_patient_rooms" string="Patient Rooms" domain="[('room_type', '=', 'patient_room')]"/>
+                    <filter name="filter_operation_rooms" string="Operation Rooms" domain="[('room_type', '=', 'operation_room')]"/>
+                    <filter name="filter_examination_rooms" string="Examination Rooms" domain="[('room_type', '=', 'examination_room')]"/>
+                    <filter name="filter_consultation_rooms" string="Consultation Rooms" domain="[('room_type', '=', 'consultation_room')]"/>
+
+                </search>
+            </field>
+        </record>
+        <record id="action_hospital_room" model="ir.actions.act_window">
+            <field name="name">Rooms</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.room</field>
+            <field name="view_mode">tree,form</field>
+
+        </record>
+        <menuitem name="Rooms"
+                  id="menu_rooms"
+                  parent="menu_hospital_details"
+                  action="action_hospital_room"
+                  sequence="20"
+        />
+
+
+    </data>
+</odoo>

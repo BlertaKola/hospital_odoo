@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="report_prescription" model="ir.actions.report">
+            <field name="name">Prescription</field>
+            <field name="model">hospital.prescription</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hospital.report_prescription_template</field>
+            <field name="report_file">hospital.report_prescription_template</field>
+        </record>
+
+        <template id="report_prescription_template">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <h2>Report PRESCRIPTION</h2>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>PATIENT</th>
+                                <th>DOCTOR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="record">
+                                <tr>
+                                    <td>
+                                        <t t-esc="record.patient_id"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="record.doctor_id"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

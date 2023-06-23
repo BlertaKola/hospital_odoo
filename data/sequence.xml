@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="sequence_hospital_patient" model="ir.sequence">
+            <field name="name">Patient Sequence</field>
+            <field name="code">hospital.patient</field>
+            <field name="prefix">HP</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="sequence_hospital_doctor" model="ir.sequence">
+            <field name="name">Doctor Sequence</field>
+            <field name="code">hospital.doctor</field>
+            <field name="prefix">HD</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="sequence_hospital_medication" model="ir.sequence">
+            <field name="name">Medication Sequence</field>
+            <field name="code">hospital.medication</field>
+            <field name="prefix">MED</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="sequence_hospital_prescription" model="ir.sequence">
+            <field name="name">Hospital Prescription</field>
+            <field name="code">hospital.prescription</field>
+            <field name="prefix">PRE</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="sequence_hospital_service" model="ir.sequence">
+            <field name="name">Hospital Service</field>
+            <field name="code">hospital.service</field>
+            <field name="prefix">HS</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="sequence_hospital_service_caategory" model="ir.sequence">
+            <field name="name">Hospital Service Category</field>
+            <field name="code">hospital.service.category</field>
+            <field name="prefix">HSC</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

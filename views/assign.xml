@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_hospital_service_assign_form" model="ir.ui.view">
+            <field name="name">hospital.service.assign.form</field>
+            <field name="model">hospital.service.assign</field>
+            <field name="arch" type="xml">
+                <form string="Assign Services">
+                    <group>
+                        <field name="patient_id"/>
+                        <field name="service_category_id"/>
+                        <field name="service_id"
+                               domain="[('category_id', '=', service_category_id)]"
+                               attrs="{'invisible': [('service_category_id', '=', False)]}"
+                        />
+                        <field name="date"/>
+                        <field name="is_taken"/>
+                        <field name="result" attrs="{'invisible': 1}"/>
+
+
+                    </group>
+                    <footer>
+                        <button name="assign_services" string="Assign" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="view_hospital_service_assign_tree" model="ir.ui.view">
+            <field name="name">hospital.service.assign.tree</field>
+            <field name="model">hospital.service.assign</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="patient_id"/>
+                    <field name="service_category_id"/>
+                    <field name="service_id"/>
+                    <field name="date"/>
+                    <field name="result"/>
+                </tree>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hospital_patients_form" model="ir.ui.view">
+        <field name="name">hospital.patient.form</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
+
+                    <div name="button_box" position="inside" attrs="{'invisible': [('id', '=', False)]}">
+                        <button name="action_open_services_assign" type="object" class="oe_stat_button"
+                                icon="fa-id-card-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="services_count"/>
+                                </span>
+                                <span class="o_stat_text">Services</span>
+                            </div>
+                        </button>
+                        <button name="action_open_appointments_assign" type="object" class="oe_stat_button"
+                                icon="fa-clock-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="appointments_count"/>
+                                </span>
+                                <span class="o_stat_text">Appointments</span>
+                            </div>
+                        </button>
+                        <button name="action_open_diagnosis" type="object" class="oe_stat_button"
+                                icon="fa-heartbeat">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="diagnosis_count"/>
+                                </span>
+                                <span class="o_stat_text">Diagnosis</span>
+                            </div>
+                        </button>
+                        <button name="action_open_prescriptions" type="object" class="oe_stat_button"
+                                icon="fa-clipboard">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="prescription_count"/>
+                                </span>
+                                <span class="o_stat_text">Prescriptions</span>
+                            </div>
+                        </button>
+                        <button name="generate_medical_report" type="object"
+                                class="oe_stat_button"
+                                icon="fa-file-text"
+                                attrs="{'invisible': [('medical_report_id', '!=', False)]}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">Med Report</span>
+                            </div>
+                        </button>
+                    </div>
+<!--                    <div id="oe_title">-->
+<!--                        <h1>-->
+<!--                            <field name="ref" readonly="1"/>-->
+<!--                        </h1>-->
+<!--                    </div>-->
+                    <group>
+                        <field name="name"/>
+                        <field name="is_child"/>
+                        <field name="age"/>
+                        <field name="gender"/>
+                        <field name="doctor_ids" widget="many2many_tags"
+                               options="{'color_field': 'color', 'no_create_edit': True}"/>
+
+                        <field name="room_id" on_change="onchange_room_id" options="{'no_create_edit': True}"/>
+<!--                        <button name="assign_room" type="object" string="Assign Room"-->
+<!--                                attrs="{'invisible': [('room_id', '!=', False)]}"/>-->
+                        <button name="release_room" type="object" string="Release Room"
+                                attrs="{'invisible': [('room_id', '=', False)]}"/>
+                        <field name="medical_report_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Services">
+                            <field name="service_assign_ids" mode="tree,kanban">
+                                <tree string="Assigned Services" editable="bottom">
+                                    <field name="service_id"/>
+                                    <field name="date"/>
+                                    <field name="service_category_id"/>
+                                    <field name="result"/>
+
+                                </tree>
+                                <kanban>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div class="o_box_header">
+                                                <strong>
+                                                    <t t-esc="record.service_id"/>
+                                                </strong>
+                                            </div>
+                                            <div class="o_box_content">
+                                                <p>Date:
+                                                    <t t-esc="record.date"/>
+                                                </p>
+                                                <p>Category:
+                                                    <t t-esc="record.service_category_id"/>
+                                                </p>
+                                            </div>
+                                            <div class="o_box_content">
+                                                <p>Result:
+                                                    <t t-esc="record.result"/>
+                                                </p>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                    <field name="service_id"/>
+                                    <field name="date"/>
+                                    <field name="service_category_id"/>
+                                    <field name="result"/>
+                                </kanban>
+
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="view_hospital_patients_tree" model="ir.ui.view">
+        <field name="name">hospital.patient.tree</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="color" widget="color" optional="show"/>
+                <field name="ref" optional="show"/>
+                <field name="name" optional="show"/>
+                <field name="age" optional="show"/>
+                <field name="gender" optional="show"/>
+                <field name="activity_ids" widget="list_activity"/>
+                <field name="room_id" optional="show"/>
+                <field name="medical_report_id" options="{'no_open': True}" string="Medical Report" widget="many2one"
+                       optional="show">
+                    <tree>
+                        <field name="name"/>
+                    </tree>
+                </field>
+                <field name="status"
+                       decoration-warning="status == 'other'"
+                       decoration-info="status == 'admitted'"
+                       widget="badge" optional="show"/>
+            </tree>
+
+        </field>
+    </record>
+
+    <record id="view_hospital_patients_search" model="ir.ui.view">
+        <field name="name">hospital.patient.search</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="ref"/>
+                <field name="name" string="Patient Name"
+                       filter_domain="['|', ('name','ilike', self), ('ref', 'ilike', self)]"/>
+                <field name="age"/>
+                <filter name="less15" string="Less than 15" domain="[('age', '&lt;', '15')]"/>
+
+                <field name="gender"/>
+
+                <filter name="filter_male" string="Male" domain="[('gender', '=', 'male')]"/>
+                <filter name="filter_female" string="Female" domain="[('gender', '=', 'female')]"/>
+                <filter name="filter_other" string="Other" domain="[('gender', '=', 'other')]"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hospital_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">tree,form</field>
+
+    </record>
+    <menuitem name="Patients"
+              id="menu_patients"
+              parent="menu_hospital_details"
+              action="action_hospital_patient"
+              sequence="10"
+    />
+</odoo>
