@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="report_patient_med_cartel">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                HELPPPPPPPPPPPPPPP
+            </div>
+        </t>
+    </template>
+
+</odoo>

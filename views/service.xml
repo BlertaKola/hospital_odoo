@@ -15,6 +15,7 @@
                         <field name="name"/>
                         <field name="price"/>
                         <field name="category_id"/>
+                        <field name="doctor_id"/>
                     </group>
 
                 </sheet>

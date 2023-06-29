@@ -2,8 +2,7 @@ import random
 from odoo import fields, models, api
 from datetime import date
 import time
-
-
+from odoo.exceptions import ValidationError
 class HospitalService(models.Model):
     _name = 'hospital.service'
     _description = 'Hospital Services'
@@ -13,7 +12,7 @@ class HospitalService(models.Model):
     price = fields.Float(string='Price')
     category_id = fields.Many2one('hospital.service.category', string='Category')
     patient_id = fields.Many2one('hospital.patient')
-    doctor_ids = fields.One2many('hospital.doctor', 'service_id', string='Doctor')
+    doctor_id = fields.Many2one('hospital.doctor', string='Doctor')
     ref = fields.Char(string='Reference', default=lambda self: ('New Service'))
     service_assign_ids = fields.One2many('hospital.service.assign', 'service_id', string='Service Assignments')
 
@@ -33,6 +32,7 @@ class HospitalServiceAssign(models.Model):
                                  domain="[('category_id', '=', service_category_id)]")
     date = fields.Date(string='Date', compute='_compute_date', store=True)
     service_category_id = fields.Many2one('hospital.service.category', string='Service Category')
+    doctor = fields.Many2one(related='service_id.doctor_id', string='Doctor')
     result = fields.Selection([
         ('satisfactory', 'Satisfactory'),
         ('unsatisfactory', 'Unsatisfactory'),
@@ -74,7 +74,25 @@ class HospitalServiceAssign(models.Model):
     def assign_services(self):
         print("BLERTAAAAAAAAAAAAAAAAAaaaa")
 
-    # def write(self, vals):
-    #     result = super(HospitalServiceAssign, self).write(vals)
-    #     self.patient_id.update_medical_report()
-    #     return result
+    @api.model_create_multi
+    def create(self, vals):
+        service = super(HospitalServiceAssign, self).create(vals)
+
+        patient = service.patient_id
+        print(patient.id)
+        cartel = patient.cartel_id
+        assigned_services = self.env['hospital.service.assign'].search([('patient_id', '=', patient.id)])
+        res = []
+        for rec in assigned_services:
+            res.append(rec.id)
+        print(assigned_services)
+        print(res)
+
+        if cartel:
+            cartel.write({
+                'test_data': res
+            })
+        else:
+            raise ValidationError("You cannot take a service without generating a cartel.")
+
+        return service

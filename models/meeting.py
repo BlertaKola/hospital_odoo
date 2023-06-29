@@ -1,6 +1,6 @@
 
 from odoo import fields, models, api
-from datetime import datetime, timedelta
+from datetime import time
 
 
 class HospitalMeeting(models.Model):

@@ -14,15 +14,9 @@ class HospitalPrescription(models.Model):
     doctor_id = fields.Many2one('hospital.doctor', string='Doctor')
     doctor_specialization = fields.Selection(related='doctor_id.specialization')
     done = fields.Boolean(string='Done?', default=False)
-    report_id = fields.Many2one('hospital.report')
+    # report_id = fields.Many2one('hospital.report')
 
 
-
-    @api.onchange('medication_ids')
-    def update_medication_quantity(self):
-        for prescription in self:
-            for medication in prescription.medication_ids:
-                medication.quantity -= 1
 
 
 

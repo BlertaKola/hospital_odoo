@@ -25,8 +25,6 @@ class HospitalPatient(models.Model):
 
     room_id = fields.Many2one('hospital.room', string='Room')
 
-    medical_report_id = fields.Many2one('hospital.report', string='Medical Report', readonly=True)
-
     doctor_ids = fields.Many2many('hospital.doctor', string='Doctor')
 
     color = fields.Char(string='Color', compute='_compute_random_color')
@@ -45,6 +43,16 @@ class HospitalPatient(models.Model):
     diagnosis_count = fields.Integer(string='Diagnosis count', compute='_compute_diagnosis_count')
     appointments_count = fields.Integer(string='Appointment count', compute='_compute_appointments_count')
     image = fields.Image(string='Image')
+    cartel_id = fields.Many2one('hospital.cartel', string='Cartel', readonly=True)
+
+
+
+    def generate_cartel(self):
+        cartel = self.env['hospital.cartel'].create({
+            'name': f"{self.name}'s Cartel",
+            'patient': self.name
+        })
+        self.cartel_id = cartel.id
 
 
     def _compute_appointments_count(self):
@@ -137,9 +145,7 @@ class HospitalPatient(models.Model):
         for patient in self:
             patient.color_integer = int(patient.color[1:], 16)
 
-    # @api.onchange('room_id')
-    # def onchange_room_id(self):
-    #     self.assign_room(self.room_id.id)
+
 
     def assign_room(self, room_id):
         room = self.env['hospital.room'].browse(room_id)
@@ -157,26 +163,9 @@ class HospitalPatient(models.Model):
             self.room_id.occupancy -= 1
             self.room_id = False
 
-    def generate_medical_report(self):
-        doctor_names = ', '.join(self.doctor_ids.mapped('name'))
-        report = self.env['hospital.report'].create({
-            'name': f"{self.name}'s Medical Report ",
-            'patient_id': self.name,
-            'age': self.age,
-            'doctor_ids': doctor_names
-        })
-        self.medical_report_id = report.id
 
 
-    # def generate_medical_report(self):
-    #     report_name = f"{self.name}'s Medical Report"
-    #     report = self.env['hospital.report'].create({
-    #         'report_name': report_name,
-    #         'patient_id': self.id,
-    #         'age': self.age,
-    #         'doctor_ids': ', '.join(self.doctor_ids.mapped('name'))
-    #     })
-    #     self.medical_report_id = report.id
+
 
     @api.model_create_multi
     def create(self, data_list):

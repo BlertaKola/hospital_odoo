@@ -1,5 +1,6 @@
 from odoo import fields, models, api
 from datetime import date
+from odoo.exceptions import ValidationError
 
 class HospitalDiagnosis(models.Model):
     _name = 'hospital.diagnosis'
@@ -34,7 +35,24 @@ class HospitalDiagnosis(models.Model):
             else:
                 rec.date = False
 
-    # def write(self, vals):
-    #     result = super(HospitalDiagnosis, self).write(vals)
-    #     self.patient_id.update_medical_report()
-    #     return result
+    @api.model_create_multi
+    def create(self, vals_list):
+        diagnosis = super(HospitalDiagnosis, self).create(vals_list)
+
+        patient = diagnosis.patient_id
+        cartel = patient.cartel_id
+        patient_diagnosis = self.env['hospital.diagnosis'].search([('patient_id', '=', patient.id)])
+        res = []
+        for rec in patient_diagnosis:
+            res.append(rec.id)
+
+        print("RESSSSSS")
+        print(res)
+        if cartel:
+            cartel.write({
+                'diagnosis_data': res
+            })
+        else:
+            raise ValidationError("You cant write a diagnosis without generating a cartel")
+
+        return diagnosis

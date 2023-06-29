@@ -1,6 +1,6 @@
 from . import patient
 from . import room
-from . import report
+from . import cartel
 from . import medication
 from . import doctor
 from . import prescription

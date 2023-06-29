@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="report_patient_cartel" model="ir.actions.report">
+            <field name="name">Patient Cartel</field>
+            <field name="model">hospital.cartel</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hospital.report_patient_med_cartel</field>
+            <field name="report_file">hospital.report_patient_med_cartel</field>
+            <field name="binding_model_id" ref="model_hospital_cartel"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_patient_med_cartel">
+            <t t-call="web.basic_layout">
+                    <div class="page">
+                        <h1>HELP</h1>
+                    </div>
+            </t>
+        </template>
+    </data>
+</odoo>

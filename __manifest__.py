@@ -12,7 +12,6 @@
         'views/menu.xml',
         'views/patient.xml',
         'views/room.xml',
-        'views/reports.xml',
         'views/doctor.xml',
         'views/medication.xml',
         'views/prescription.xml',
@@ -21,7 +20,9 @@
         'views/assign.xml',
         'views/diagnosis.xml',
         'views/meeting.xml',
-        'reports/prescription_report.xml',
+        'views/cartel.xml',
+        'report/report.xml',
+        # 'report/patient_cartel_template.xml',
     ]
 
 }

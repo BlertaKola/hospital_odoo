@@ -46,34 +46,30 @@
                                 <span class="o_stat_text">Prescriptions</span>
                             </div>
                         </button>
-                        <button name="generate_medical_report" type="object"
-                                class="oe_stat_button"
+                        <button name="generate_cartel" type="object" class="oe_stat_button"
                                 icon="fa-file-text"
-                                attrs="{'invisible': [('medical_report_id', '!=', False)]}">
+                                attrs="{'invisible': [('cartel_id', '!=', False)]}">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value">Med Report</span>
+                                <span class="o_stat_text">Cartel</span>
                             </div>
                         </button>
+
                     </div>
-<!--                    <div id="oe_title">-->
-<!--                        <h1>-->
-<!--                            <field name="ref" readonly="1"/>-->
-<!--                        </h1>-->
-<!--                    </div>-->
+
                     <group>
                         <field name="name"/>
                         <field name="is_child"/>
                         <field name="age"/>
                         <field name="gender"/>
+                        <field name="cartel_id"/>
                         <field name="doctor_ids" widget="many2many_tags"
                                options="{'color_field': 'color', 'no_create_edit': True}"/>
 
                         <field name="room_id" on_change="onchange_room_id" options="{'no_create_edit': True}"/>
-<!--                        <button name="assign_room" type="object" string="Assign Room"-->
-<!--                                attrs="{'invisible': [('room_id', '!=', False)]}"/>-->
+
                         <button name="release_room" type="object" string="Release Room"
                                 attrs="{'invisible': [('room_id', '=', False)]}"/>
-                        <field name="medical_report_id"/>
+
                     </group>
                     <notebook>
                         <page string="Services">
@@ -140,7 +136,10 @@
                 <field name="gender" optional="show"/>
                 <field name="activity_ids" widget="list_activity"/>
                 <field name="room_id" optional="show"/>
-                <field name="medical_report_id" options="{'no_open': True}" string="Medical Report" widget="many2one"
+                <field name="cartel_id"
+                       options="{'no_open': False}"
+                       string="Cartel"
+                       widget="many2one"
                        optional="show">
                     <tree>
                         <field name="name"/>
