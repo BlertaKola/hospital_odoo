@@ -70,5 +70,6 @@
               parent="menu_hospital_medications"
               action="action_hospital_medication"
               sequence="10"
+
     />
 </odoo>
