@@ -6,9 +6,10 @@ class HospitalDiagnosis(models.Model):
     _name = 'hospital.diagnosis'
     _description = 'Medical Diagnosis'
 
+    name = fields.Char(string='Name', readonly=True, copy=False)
     patient_id = fields.Many2one('hospital.patient', string='Patient')
     doctor_id = fields.Many2one('hospital.doctor', string='Doctor')
-    date = fields.Date(string='Date', compute='_compute_date', store=True)
+    date = fields.Date(string='Date', store=True)
     description = fields.Text(string='Diagnosis')
     dietary_restrictions = fields.Selection([
         ('alcohol', 'Alcohol'),
@@ -27,19 +28,18 @@ class HospitalDiagnosis(models.Model):
 
 
 
-    @api.depends('done')
-    def _compute_date(self):
-        for rec in self:
-            if rec.done:
-                rec.date = date.today()
-            else:
-                rec.date = False
-
     @api.model_create_multi
     def create(self, vals_list):
+        for rec in vals_list:
+            rec['date'] = date.today()
         diagnosis = super(HospitalDiagnosis, self).create(vals_list)
 
         patient = diagnosis.patient_id
+
+        if patient:
+            diagnosis.name = f"{patient.name}'s Diagnosis"
+        print(diagnosis.name)
+
         cartel = patient.cartel_id
         patient_diagnosis = self.env['hospital.diagnosis'].search([('patient_id', '=', patient.id)])
         res = []
@@ -56,3 +56,11 @@ class HospitalDiagnosis(models.Model):
             raise ValidationError("You cant write a diagnosis without generating a cartel")
 
         return diagnosis
+
+
+    def name_get(self):
+        result = []
+        for rec in self:
+            name = f"{rec.patient_id}'s Diagnosis"
+            result.append((rec.id, name))
+        return result

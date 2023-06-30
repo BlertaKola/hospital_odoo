@@ -10,7 +10,7 @@ class HospitalCartel(models.Model):
     test_data = fields.Many2many('hospital.service.assign')
     service = fields.Many2one(related='test_data.service_id')
     diagnosis_data = fields.Many2many('hospital.diagnosis')
-    allergies = fields.Char()
+    allergies = fields.Many2many('hospital.allergy')
 
 
     def create(self, vals_list):

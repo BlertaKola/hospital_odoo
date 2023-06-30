@@ -16,5 +16,15 @@
               parent="hospital_menu_root"
               sequence="10"
     />
+    <menuitem name="Services"
+              id="menu_hospital_services"
+              parent="hospital_menu_root"
+              sequence="10"
+    />
+    <menuitem name="Appointments"
+              id="menu_hospital_appointments"
+              parent="hospital_menu_root"
+              sequence="10"
+    />
 
 </odoo>

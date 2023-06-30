@@ -17,8 +17,22 @@ class HospitalMeeting(models.Model):
 
     #timing
     starting_time = fields.Datetime(string='Starting at')
-    ending_time = fields.Datetime(string='Ending at')
-    duration = fields.Float(string='Duration')
+    status = fields.Selection([
+        ('due', 'Due'),
+        ('upcoming', 'Upcoming'),
+        ('completed', 'Completed')
+    ], string='Status', compute='_compute_status')
+
+    @api.depends('starting_time', 'state')
+    def _compute_status(self):
+        current_datetime = fields.Datetime.now()
+        for record in self:
+            if record.state == 'draft' and record.starting_time and record.starting_time < current_datetime:
+                record.status = 'due'
+            elif record.state == 'draft' or record.state == 'in_progress' or record.state == 'done':
+                record.status = 'completed' if record.starting_time and record.starting_time < current_datetime else 'upcoming'
+            elif record.state == 'cancel':
+                record.status = False
 
 
     doc_room = fields.Many2one(related='doctor_id.room_id', readonly=True)

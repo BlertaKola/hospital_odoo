@@ -27,6 +27,7 @@
             <field name="model">hospital.diagnosis</field>
             <field name="arch" type="xml">
                 <tree string="Diagnosis">
+                    <field name="name"/>
                     <field name="patient_id"/>
                     <field name="date"/>
                     <field name="doctor_id"/>
@@ -43,7 +44,7 @@
 
         <menuitem name="Medical Diagnosis"
               id="menu_diagnosis"
-              parent="menu_hospital_details"
+              parent="menu_hospital_medications"
               action="action_hospital_diagnosis"
               sequence="10"
     />

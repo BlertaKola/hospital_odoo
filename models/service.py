@@ -40,13 +40,21 @@ class HospitalServiceAssign(models.Model):
         ('negative', 'Negative'),
         ('excellent', 'Excellent'),
         ('poor', 'Poor')
-    ], string='Results', compute='_compute_result', store=True)
-    is_taken = fields.Boolean(string='Take', default=False)
+    ], string='Results', store=True)
 
-    @api.depends('is_taken')
-    def _compute_result(self):
-        print("BLERTA")
-        for rec in self:
+
+
+    @api.onchange('service_category_id')
+    def _onchange_service_category_id(self):
+        self.service_id = False
+
+
+    def assign_services(self):
+        print("BLERTAAAAAAAAAAAAAAAAAaaaa")
+
+    @api.model_create_multi
+    def create(self, vals):
+        for rec in vals:
             options = [
                 'satisfactory',
                 'unsatisfactory',
@@ -56,26 +64,8 @@ class HospitalServiceAssign(models.Model):
                 'poor'
             ]
             print("DELAY")
-            rec.result = random.choice(options)
-            print(rec.result)
-
-    @api.onchange('service_category_id')
-    def _onchange_service_category_id(self):
-        self.service_id = False
-
-    @api.depends('is_taken')
-    def _compute_date(self):
-        for rec in self:
-            if rec.is_taken:
-                rec.date = date.today()
-            else:
-                rec.date = False
-
-    def assign_services(self):
-        print("BLERTAAAAAAAAAAAAAAAAAaaaa")
-
-    @api.model_create_multi
-    def create(self, vals):
+            rec['result'] = random.choice(options)
+            rec['date'] = date.today()
         service = super(HospitalServiceAssign, self).create(vals)
 
         patient = service.patient_id

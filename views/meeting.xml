@@ -36,13 +36,6 @@
                                         <field name="patient_id"/>
                                         <field name="doctor_id"/>
                                         <field name="starting_time" string="Starting at"/>
-                                        <field name="ending_time" string="Ending at"/>
-                                        <label for="duration"/>
-                                        <div>
-                                            <field name="duration" widget="float_time" class="oe_inline"
-                                                   attrs="{'readonly': [('id','!=', False)]}"/>
-                                            <span>hours</span>
-                                        </div>
                                     </group>
                                     <group>
                                         <field name="doc_room" attrs="{'invisible': [('doctor_id', '=', False)]}"/>
@@ -64,24 +57,14 @@
                     <field name="patient_id"/>
                     <field name="doctor_id"/>
                     <field name="doc_room"/>
+                    <field name="starting_time"/>
                     <field name="priority"/>
                     <field name="state"/>
+                    <field name="status"/>
                 </tree>
             </field>
         </record>
 
-        <!--        <record id="meeting_search_view" model="ir.ui.view">-->
-        <!--            <field name="name">ProjectName.meeting.search</field>-->
-        <!--            <field name="model">ProjectName.meeting</field>-->
-        <!--            <field name="arch" type="xml">-->
-        <!--                <search string="ModelTitle">-->
-        <!--                    <group expand="1" string="Group By">-->
-        <!--                        <filter string="Example Field" name="example_field" domain="[]"-->
-        <!--                                context="{'group_by':'example_field'}"/>-->
-        <!--                    </group>-->
-        <!--                </search>-->
-        <!--            </field>-->
-        <!--        </record>-->
 
         <record id="action_hospital_meetings" model="ir.actions.act_window">
             <field name="name">Appointments</field>
@@ -91,7 +74,7 @@
         </record>
 
         <menuitem name="Appointments" id="meeting_menu"
-                  parent="menu_hospital_medications"
+                  parent="menu_hospital_appointments"
                   action="action_hospital_meetings"
                   sequence="10"
         />

@@ -43,7 +43,7 @@
                                     <h2>Allergies</h2>
                                 </div>
                                 <group>
-                                    <field name="allergies"/>
+                                    <field name="allergies" readonly="1" string=""/>
                                 </group>
                             </page>
                         </notebook>

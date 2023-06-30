@@ -51,7 +51,7 @@
 
         <menuitem name="Services Category"
                   id="menu_services_category"
-                  parent="menu_hospital_medications"
+                  parent="menu_hospital_services"
                   action="action_hospital_service_category"
                   sequence="10"
         />

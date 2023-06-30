@@ -8,6 +8,7 @@
     'website': 'No website',
     'data': [
         'security/ir.model.access.csv',
+        'security/security.xml',
         'data/sequence.xml',
         'views/menu.xml',
         'views/patient.xml',
@@ -21,6 +22,7 @@
         'views/diagnosis.xml',
         'views/meeting.xml',
         'views/cartel.xml',
+        'views/allergy.xml',
         'report/report.xml',
         # 'report/patient_cartel_template.xml',
     ]

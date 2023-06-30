@@ -89,6 +89,20 @@ class HospitalPatient(models.Model):
             'context': {'default_patient_id': self.id},
         }
 
+
+
+    def action_open_allergies(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Create Allergies',
+            'res_model': 'hospital.allergy',
+            'domain': [('patient_id', '=', False)],
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_patient_id': self.id},
+        }
+
+
     def action_open_diagnosis(self):
         print("BLERT")
         return {

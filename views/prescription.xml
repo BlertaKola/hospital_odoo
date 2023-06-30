@@ -47,7 +47,7 @@
 
     <menuitem name="Medical Prescriptions"
               id="menu_prescriptions"
-              parent="menu_hospital_details"
+              parent="menu_hospital_medications"
               action="action_hospital_prescription"
               sequence="10"
     />

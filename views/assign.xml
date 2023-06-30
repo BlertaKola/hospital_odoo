@@ -15,7 +15,6 @@
                                attrs="{'invisible': [('service_category_id', '=', False)]}"
                         />
                         <field name="date"/>
-                        <field name="is_taken"/>
                         <field name="result" attrs="{'invisible': 1}"/>
 
 

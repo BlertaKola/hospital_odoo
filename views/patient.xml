@@ -11,7 +11,8 @@
 
                     <div name="button_box" position="inside" attrs="{'invisible': [('id', '=', False)]}">
                         <button name="action_open_services_assign" type="object" class="oe_stat_button"
-                                icon="fa-id-card-o">
+                                icon="fa-id-card-o"
+                                groups="hospital.group_hospital_doctor">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="services_count"/>
@@ -20,7 +21,8 @@
                             </div>
                         </button>
                         <button name="action_open_appointments_assign" type="object" class="oe_stat_button"
-                                icon="fa-clock-o">
+                                icon="fa-clock-o"
+                                groups="hospital.group_hospital_doctor">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="appointments_count"/>
@@ -29,7 +31,8 @@
                             </div>
                         </button>
                         <button name="action_open_diagnosis" type="object" class="oe_stat_button"
-                                icon="fa-heartbeat">
+                                icon="fa-heartbeat"
+                                groups="hospital.group_hospital_doctor">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="diagnosis_count"/>
@@ -38,12 +41,20 @@
                             </div>
                         </button>
                         <button name="action_open_prescriptions" type="object" class="oe_stat_button"
-                                icon="fa-clipboard">
+                                icon="fa-clipboard"
+                                groups="hospital.group_hospital_doctor">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="prescription_count"/>
                                 </span>
                                 <span class="o_stat_text">Prescriptions</span>
+                            </div>
+                        </button>
+                        <button name="action_open_allergies" type="object" class="oe_stat_button"
+                                icon="fa-plus-square"
+                                groups="hospital.group_hospital_doctor">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Allergies</span>
                             </div>
                         </button>
                         <button name="generate_cartel" type="object" class="oe_stat_button"
@@ -71,48 +82,6 @@
                                 attrs="{'invisible': [('room_id', '=', False)]}"/>
 
                     </group>
-                    <notebook>
-                        <page string="Services">
-                            <field name="service_assign_ids" mode="tree,kanban">
-                                <tree string="Assigned Services" editable="bottom">
-                                    <field name="service_id"/>
-                                    <field name="date"/>
-                                    <field name="service_category_id"/>
-                                    <field name="result"/>
-
-                                </tree>
-                                <kanban>
-                                    <templates>
-                                        <t t-name="kanban-box">
-                                            <div class="o_box_header">
-                                                <strong>
-                                                    <t t-esc="record.service_id"/>
-                                                </strong>
-                                            </div>
-                                            <div class="o_box_content">
-                                                <p>Date:
-                                                    <t t-esc="record.date"/>
-                                                </p>
-                                                <p>Category:
-                                                    <t t-esc="record.service_category_id"/>
-                                                </p>
-                                            </div>
-                                            <div class="o_box_content">
-                                                <p>Result:
-                                                    <t t-esc="record.result"/>
-                                                </p>
-                                            </div>
-                                        </t>
-                                    </templates>
-                                    <field name="service_id"/>
-                                    <field name="date"/>
-                                    <field name="service_category_id"/>
-                                    <field name="result"/>
-                                </kanban>
-
-                            </field>
-                        </page>
-                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" groups="base.group_user"/>
