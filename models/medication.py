@@ -19,7 +19,6 @@ class HospitalMedication(models.Model):
             ('monthly', 'Monthly')
         ], string='Frequency', default='daily'
     )
-    # prescription_id = fields.Many2one(string='Prescription')
     instructions = fields.Text(string='Instructions')
     expiry_date = fields.Date(string='Expiry Date')
     ref = fields.Char(string='Reference', default=lambda self: ('New'))

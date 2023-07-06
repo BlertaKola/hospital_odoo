@@ -38,16 +38,19 @@ class HospitalDoctor(models.Model):
     service_id = fields.Many2one('hospital.service', string='Service Provided')
     image = fields.Image(string='Image')
 
+
     @api.depends('name')
     def _compute_random_color(self):
         for patient in self:
             random_number = random.randint(0, 16777215)  # Generate a random number between 0 and 16777215
             patient.color = '#{:06x}'.format(random_number)  # Convert the random number to a hexadecimal color value
 
+
     @api.depends('color')
     def _compute_color_integer(self):
         for patient in self:
             patient.color_integer = int(patient.color[1:], 16)
+
 
     @api.model_create_multi
     def create(self, data_list):

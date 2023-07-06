@@ -33,7 +33,6 @@ class HospitalRoom(models.Model):
 
     facilities = fields.Text(string='Facilities')
     floor_location = fields.Char(string='Floor/Location')
-    patient_ids = fields.One2many('hospital.room.lines', 'patient_id', string='Patients', readonly=True)
     price = fields.Float(string='Price')
     doctor_id = fields.Many2one('hospital.doctor')
 
@@ -50,10 +49,3 @@ class HospitalRoom(models.Model):
             elif room.occupancy >= room.capacity:
                 room.status = 'full'
 
-
-class HospitalRoomLines(models.Model):
-    _name = 'hospital.room.lines'
-    _description = 'Hospital Room Lines'
-
-    patient_id = fields.Many2one('hospital.patient')
-    room_id = fields.Many2one('hospital.room', string='Room', readonly=True)

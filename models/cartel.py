@@ -1,5 +1,4 @@
-from odoo import fields, models, api
-import json
+from odoo import fields, models
 
 class HospitalCartel(models.Model):
     _name = 'hospital.cartel'
@@ -12,14 +11,14 @@ class HospitalCartel(models.Model):
     diagnosis_data = fields.Many2many('hospital.diagnosis')
     allergies = fields.Many2many('hospital.allergy')
 
-
     def create(self, vals_list):
         cartel = super(HospitalCartel, self).create(vals_list)
         patient = self.env['hospital.patient'].browse(vals_list.get('patient_id'))
         patient.cartel_id = cartel.id
         return cartel
 
-
+    #Returns a textual representation for the records in ``self``, with
+    #one item output per input record, in the same order.
     def name_get(self):
         result = []
         for rec in self:

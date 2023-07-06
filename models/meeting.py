@@ -23,6 +23,7 @@ class HospitalMeeting(models.Model):
         ('completed', 'Completed')
     ], string='Status', compute='_compute_status')
 
+    #compute status of the meeting
     @api.depends('starting_time', 'state')
     def _compute_status(self):
         current_datetime = fields.Datetime.now()

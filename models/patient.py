@@ -29,7 +29,6 @@ class HospitalPatient(models.Model):
 
     color = fields.Char(string='Color', compute='_compute_random_color')
 
-    prescription_ids = fields.One2many('hospital.patient.lines', 'patient_id', string='Prescription')
 
     status = fields.Selection([
         ('admitted', 'Admitted'),
@@ -202,37 +201,3 @@ class HospitalPatient(models.Model):
         else:
             self.is_child = False
 
-
-    # @api.onchange('service_assign_ids', 'diagnosis_ids', 'prescription_ids')
-    # def update_medical_report(self):
-    #     print("BLERTAAAAAAAAAAAAA")
-    #     medical_report = self.medical_report_id
-    #
-    #     # Fetch related records
-    #     services = self.service_assign_ids
-    #     diagnoses = self.diagnosis_ids
-    #     prescriptions = self.prescription_ids
-    #
-    #     # Update fields in the medical report
-    #     medical_report.service_count = len(services)
-    #     medical_report.diagnosis_count = len(diagnoses)
-    #     medical_report.prescription_count = len(prescriptions)
-    #
-    #     # You can add more logic here to update other fields in the medical report
-    #     return True
-
-    # def write(self, vals):
-    #     result = super(HospitalPatient, self).write(vals)
-    #     self.update_medical_report()
-    #     return result
-
-
-
-
-
-class HospitalPatientLines(models.Model):
-    _name = 'hospital.patient.lines'
-    _description = 'Hospital Patient Lines'
-
-    patient_id = fields.Many2one('hospital.patient')
-    prescription_id = fields.Many2one('hospital.prescription', string='Prescription')

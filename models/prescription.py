@@ -15,6 +15,9 @@ class HospitalPrescription(models.Model):
     doctor_specialization = fields.Selection(related='doctor_id.specialization')
     done = fields.Boolean(string='Done?', default=False)
 
+
+
+    #dont show the medications that a patient is allergic to to the prescription form
     @api.depends('patient_id')
     def _compute_medications(self):
         for prescription in self:

@@ -63,21 +63,19 @@ class HospitalServiceAssign(models.Model):
                 'excellent',
                 'poor'
             ]
-            print("DELAY")
             rec['result'] = random.choice(options)
             rec['date'] = date.today()
         service = super(HospitalServiceAssign, self).create(vals)
 
         patient = service.patient_id
-        print(patient.id)
         cartel = patient.cartel_id
         assigned_services = self.env['hospital.service.assign'].search([('patient_id', '=', patient.id)])
         res = []
         for rec in assigned_services:
             res.append(rec.id)
-        print(assigned_services)
-        print(res)
 
+        #write services a patient has taken to the cartel
+        #test_data holds all the services
         if cartel:
             cartel.write({
                 'test_data': res

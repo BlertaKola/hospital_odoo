@@ -38,16 +38,13 @@ class HospitalDiagnosis(models.Model):
 
         if patient:
             diagnosis.name = f"{patient.name}'s Diagnosis"
-        print(diagnosis.name)
 
         cartel = patient.cartel_id
         patient_diagnosis = self.env['hospital.diagnosis'].search([('patient_id', '=', patient.id)])
         res = []
         for rec in patient_diagnosis:
             res.append(rec.id)
-
-        print("RESSSSSS")
-        print(res)
+        #write in the cartel diagnosis you get from the patient
         if cartel:
             cartel.write({
                 'diagnosis_data': res
