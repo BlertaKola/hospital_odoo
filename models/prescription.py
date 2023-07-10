@@ -15,6 +15,7 @@ class HospitalPrescription(models.Model):
     doctor_specialization = fields.Selection(related='doctor_id.specialization')
     medication_ids = fields.Many2many('hospital.medication', string='Medications')
 
+
     @api.model_create_multi
     def create(self, data_list):
         for data in data_list:
@@ -39,6 +40,15 @@ class HospitalPrescription(models.Model):
         else:
             raise ValidationError("You cant write a prescription without generating a cartel")
         print(prescription)
+        allergic_medications = patient.allergy_ids.mapped('medication_ids')
+        selected_medications = prescription.medication_ids
+
+        overlapping_medications = allergic_medications & selected_medications
+        if overlapping_medications:
+            medication_names = ', '.join(overlapping_medications.mapped('name'))
+            error_msg = f"You're allergic to the following medications: {medication_names}"
+            raise ValidationError(error_msg)
+
         return prescription
 
     def name_get(self):
@@ -48,3 +58,15 @@ class HospitalPrescription(models.Model):
             result.append((rec.id, name))
         return result
 
+    def write(self, vals):
+        if 'medication_ids' in vals:
+            allergic_medications = self.patient_id.allergy_ids.mapped('medication_ids')
+            selected_medications = self.medication_ids
+
+            overlapping_medications = allergic_medications & selected_medications
+            if overlapping_medications:
+                medication_names = ', '.join(overlapping_medications.mapped('name'))
+                error_msg = f"You're allergic to the following medications: {medication_names}"
+                raise ValidationError(error_msg)
+
+        return super(HospitalPrescription, self).write(vals)

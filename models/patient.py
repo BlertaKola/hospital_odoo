@@ -38,7 +38,7 @@ class HospitalPatient(models.Model):
     appointments_count = fields.Integer(string='Appointment count', compute='_compute_appointments_count')
     image = fields.Image(string='Image')
     cartel_id = fields.Many2one('hospital.cartel', string='Cartel', readonly=True)
-
+    allergy_ids = fields.One2many('hospital.allergy', 'patient_id', string='Allergies')
     birthday = fields.Date(string='Birthday')
     age = fields.Integer(string='Age', compute='_compute_age')
 

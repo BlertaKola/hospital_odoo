@@ -53,24 +53,28 @@ class HospitalMeeting(models.Model):
 
     # timing
     starting_time = fields.Datetime(string='Starting at', required=True)
-    ending_time = fields.Datetime(string='Ending Time', compute='_compute_ending_time')
+    ending_time = fields.Datetime(string='Ending Time', compute='_compute_ending_time', store=True)
 
-
+    @api.depends('starting_time')
     def _compute_ending_time(self):
         for rec in self:
-            rec.ending_time = rec.starting_time + timedelta(hours=1)
+            if rec.starting_time:
+                starting_time = fields.Datetime.from_string(rec.starting_time)
+                duration = timedelta(hours=1)  # Assuming the meeting duration is 1 hour
+                rec.ending_time = starting_time + duration
+            else:
+                rec.ending_time = False
 
     @api.constrains('starting_time')
     def _check_existing_meetings(self):
         for meeting in self:
             start_time = meeting.starting_time
-            end_time = meeting.starting_time + timedelta(hours=1)
+            end_time = meeting.starting_time + timedelta(hours=1)  # Assuming the meeting duration is 1 hour
             domain = [
                 ('starting_time', '<', end_time),
                 ('ending_time', '>', start_time),
                 ('doctor_id', '=', meeting.doctor_id.id),
-                ('id', '!=', meeting.id),
-                ('state', 'not in', ['draft', 'in_progress', 'cancel'])
+                ('id', '!=', meeting.id)
             ]
             conflicting_meetings = self.search(domain)
 
@@ -82,6 +86,7 @@ class HospitalMeeting(models.Model):
                     if rec.starting_time < end_time <= rec.ending_time:
                         raise ValidationError(
                             "This hour is already taken by another meeting. Please choose another timeslot.")
+
 
     def action_in_progress(self):
         for rec in self:
