@@ -46,6 +46,14 @@
                                     <field name="allergies" readonly="1" string=""/>
                                 </group>
                             </page>
+                            <page string="Prescriptions">
+                                <div class="oe_subpage">
+                                    <h2>Prescriptions</h2>
+                                </div>
+                                <group>
+                                    <field name="prescription_data" readonly="1" string=""/>
+                                </group>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>
@@ -75,8 +83,6 @@
                   action="cartel_act_window"
                   sequence="10"
                   groups="hospital.group_hospital_doctor,hospital.group_hospital_administrator"
-
-
         />
 
     </data>

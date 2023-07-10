@@ -28,8 +28,9 @@ class HospitalRoom(models.Model):
         ],
         string='Status',
         compute='_compute_room_status',
-
     )
+
+
 
     facilities = fields.Text(string='Facilities')
     floor_location = fields.Char(string='Floor/Location')
@@ -48,4 +49,9 @@ class HospitalRoom(models.Model):
                 room.status = 'occupied'
             elif room.occupancy >= room.capacity:
                 room.status = 'full'
+
+
+
+
+
 

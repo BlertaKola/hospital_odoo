@@ -6,20 +6,18 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <div id="oe_title">
-                        <h1>
-                            <field name="ref" readonly="1"/>
-                        </h1>
-                    </div>
                     <group>
                         <field name="patient_id"/>
                         <field name="patient_age"/>
-                        <field name="medication_ids" domain="[('active', '=', True)]"/>
                         <field name="doctor_id"/>
                         <field name="doctor_specialization"/>
-                        <field name="done"/>
                     </group>
+                    <notebook>
+                        <page string="Meds">
+                            <field name="medication_ids" widget="many2many_tags"/>
 
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
 
@@ -32,6 +30,8 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="ref"/>
+                <field name="patient_id"/>
+                <field name="date"/>
             </tree>
 
         </field>

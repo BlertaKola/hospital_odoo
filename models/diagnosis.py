@@ -24,7 +24,6 @@ class HospitalDiagnosis(models.Model):
         ('ibubrofen', 'Ibubrofen'),
         ('drugs', 'drugs')
     ], string='Medication Restrictions', widget='many2many_tags')
-    done = fields.Boolean(string='Done?', default=False)
 
 
 
@@ -51,7 +50,6 @@ class HospitalDiagnosis(models.Model):
             })
         else:
             raise ValidationError("You cant write a diagnosis without generating a cartel")
-
         return diagnosis
 
 

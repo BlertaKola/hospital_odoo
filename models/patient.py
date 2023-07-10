@@ -1,7 +1,7 @@
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 import random
-
+from datetime import datetime
 
 class HospitalPatient(models.Model):
     _name = 'hospital.patient'
@@ -10,18 +10,13 @@ class HospitalPatient(models.Model):
 
     name = fields.Char(string='Name', required=True, tracking=True)
 
-    age = fields.Integer(string='Age', tracking=True)
-
-    is_child = fields.Boolean(string='Is child?', tracking=True)
-
     notes = fields.Text(string='Notes', tracking=True)
 
     gender = fields.Selection([('male', 'Male'), ('female', 'Female'), ('other', 'Other')],
                               string='Gender', tracking=True)
 
-    capitalized_name = fields.Char(string='Capitalized Name', compute="_compute_capitalized_name")
 
-    ref = fields.Char(string='Reference', default=lambda self: ('New Patient'))
+    ref = fields.Char(string='Reference', default=lambda self: 'New Patient')
 
     room_id = fields.Many2one('hospital.room', string='Room')
 
@@ -44,7 +39,35 @@ class HospitalPatient(models.Model):
     image = fields.Image(string='Image')
     cartel_id = fields.Many2one('hospital.cartel', string='Cartel', readonly=True)
 
+    birthday = fields.Date(string='Birthday')
+    age = fields.Integer(string='Age', compute='_compute_age')
 
+    @api.constrains('doctor_ids')
+    def _check_doctor_limit(self):
+        max_patients_per_doctor = 10
+
+        for patient in self:
+            if len(patient.doctor_ids) > 1:
+                raise ValidationError("A patient can only have one doctor.")
+
+            doctor = patient.doctor_ids and patient.doctor_ids[0]
+            if doctor and len(doctor.patient_ids) > max_patients_per_doctor:
+                raise ValidationError(
+                    f"The doctor '{doctor.name}' already has {max_patients_per_doctor} patients. Cannot assign more patients to this doctor.")
+
+
+    @api.depends('birthday')
+    def _compute_age(self):
+        today = datetime.now().date()
+        for record in self:
+            if record.birthday:
+                birthday = fields.Date.from_string(record.birthday)
+                age = today.year - birthday.year
+                if (today.month, today.day) < (birthday.month, birthday.day):
+                    age -= 1
+                record.age = age
+            else:
+                record.age = 0
 
     def generate_cartel(self):
         cartel = self.env['hospital.cartel'].create({
@@ -126,7 +149,6 @@ class HospitalPatient(models.Model):
         }
 
     def action_open_appointments_assign(self):
-        print("MARVIIIIIIIIIIIIIIIIIIIIII")
         return {
             'type': 'ir.actions.act_window',
             'name': 'Book Appointment',
@@ -159,13 +181,21 @@ class HospitalPatient(models.Model):
             patient.color_integer = int(patient.color[1:], 16)
 
 
+    #dealing with rooms
+    show_button_assign = fields.Boolean(default=True)
 
-    def assign_room(self, room_id):
-        room = self.env['hospital.room'].browse(room_id)
+    def button_assign(self):
+        self.show_button_assign = False
+
+    def button_release(self):
+        self.show_button_assign = True
+
+    def assign_room(self):
+        room = self.env['hospital.room'].browse(self.room_id.id)
         if room.status in ['available', 'occupied'] and room.occupancy < room.capacity:
             room.occupancy += 1
             self.room_id = room
-            # self.state = 'admitted'
+            self.button_assign()
         else:
             raise ValidationError("The selected room is at full capacity.")
 
@@ -175,6 +205,7 @@ class HospitalPatient(models.Model):
         else:
             self.room_id.occupancy -= 1
             self.room_id = False
+            self.button_release()
 
 
 
@@ -185,19 +216,4 @@ class HospitalPatient(models.Model):
         for data in data_list:
             data['ref'] = self.env['ir.sequence'].next_by_code('hospital.patient')
         return super(HospitalPatient, self).create(data_list)
-
-    @api.depends('name')
-    def _compute_capitalized_name(self):
-        for rec in self:
-            if rec.name:
-                rec.capitalized_name = rec.name.upper()
-            else:
-                rec.capitalized_name = ''
-
-    @api.onchange('age')
-    def _onchange_age(self):
-        if self.age <= 10:
-            self.is_child = True
-        else:
-            self.is_child = False
 

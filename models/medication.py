@@ -21,20 +21,9 @@ class HospitalMedication(models.Model):
     )
     instructions = fields.Text(string='Instructions')
     expiry_date = fields.Date(string='Expiry Date')
-    ref = fields.Char(string='Reference', default=lambda self: ('New'))
-    prescription_ids = fields.Many2many('hospital.prescription')
-    quantity = fields.Integer(string='Medication quantity')
-    active = fields.Boolean('Active', default=True)
+    ref = fields.Char(string='Reference', default=lambda self: 'New')
+    pre_med_id = fields.Many2one('hospital.prescription.medication.rel')
 
-    @api.depends('quantity')
-    def _check_quantity(self):
-        for rec in self:
-            if rec.quantity <= 0:
-                rec.active = False
-                raise ValidationError("This medication is not available!")
-
-            else:
-                rec.active = True
 
     def check_expiry_date(self):
         today = date.today()

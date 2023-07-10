@@ -10,6 +10,7 @@ class HospitalCartel(models.Model):
     service = fields.Many2one(related='test_data.service_id')
     diagnosis_data = fields.Many2many('hospital.diagnosis')
     allergies = fields.Many2many('hospital.allergy')
+    prescription_data = fields.Many2many('hospital.prescription')
 
     def create(self, vals_list):
         cartel = super(HospitalCartel, self).create(vals_list)

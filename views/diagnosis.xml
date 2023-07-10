@@ -15,7 +15,6 @@
                             <field name="dietary_restrictions"/>
                             <field name="medication_restrictions"/>
                             <field name="doctor_id"/>
-                            <field name="done"/>
                         </group>
                     </sheet>
                 </form>

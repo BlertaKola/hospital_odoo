@@ -36,6 +36,7 @@
                                         <field name="patient_id"/>
                                         <field name="doctor_id"/>
                                         <field name="starting_time" string="Starting at"/>
+                                        <field name="ending_time"/>
                                     </group>
                                     <group>
                                         <field name="doc_room" attrs="{'invisible': [('doctor_id', '=', False)]}"/>
@@ -52,7 +53,10 @@
             <field name="name">hospital.meeting.tree</field>
             <field name="model">hospital.meeting</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree decoration-success="state == 'done'"
+                      decoration-info="state == 'in_progress'"
+                      decoration-danger="state == 'cancel'"
+                      decoration-warning="state == 'draft'">
                     <field name="name"/>
                     <field name="patient_id"/>
                     <field name="doctor_id"/>

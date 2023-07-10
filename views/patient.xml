@@ -11,8 +11,7 @@
 
                     <div name="button_box" position="inside" attrs="{'invisible': [('id', '=', False)]}">
                         <button name="action_open_services_assign" type="object" class="oe_stat_button"
-                                icon="fa-id-card-o"
-                                groups="hospital.group_hospital_doctor">
+                                icon="fa-id-card-o">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="services_count"/>
@@ -21,8 +20,7 @@
                             </div>
                         </button>
                         <button name="action_open_appointments_assign" type="object" class="oe_stat_button"
-                                icon="fa-clock-o"
-                                groups="hospital.group_hospital_doctor">
+                                icon="fa-clock-o">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="appointments_count"/>
@@ -31,8 +29,7 @@
                             </div>
                         </button>
                         <button name="action_open_diagnosis" type="object" class="oe_stat_button"
-                                icon="fa-heartbeat"
-                                groups="hospital.group_hospital_doctor">
+                                icon="fa-heartbeat">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="diagnosis_count"/>
@@ -41,8 +38,7 @@
                             </div>
                         </button>
                         <button name="action_open_prescriptions" type="object" class="oe_stat_button"
-                                icon="fa-clipboard"
-                                groups="hospital.group_hospital_doctor">
+                                icon="fa-clipboard">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value">
                                     <field name="prescription_count"/>
@@ -51,8 +47,7 @@
                             </div>
                         </button>
                         <button name="action_open_allergies" type="object" class="oe_stat_button"
-                                icon="fa-plus-square"
-                                groups="hospital.group_hospital_doctor">
+                                icon="fa-plus-square">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_text">Allergies</span>
                             </div>
@@ -68,20 +63,30 @@
                     </div>
 
                     <group>
-                        <field name="name"/>
-                        <field name="is_child"/>
-                        <field name="age"/>
-                        <field name="gender"/>
-                        <field name="cartel_id"/>
-                        <field name="doctor_ids" widget="many2many_tags"
-                               options="{'color_field': 'color', 'no_create_edit': True}"/>
-
-                        <field name="room_id" on_change="onchange_room_id" options="{'no_create_edit': True}"/>
-
-                        <button name="release_room" type="object" string="Release Room"
-                                attrs="{'invisible': [('room_id', '=', False)]}"/>
-
+                        <group>
+                            <field name="name"/>
+                            <field name="birthday"/>
+                            <field name="age"/>
+                            <field name="gender"/>
+                            <field name="doctor_ids" widget="many2many_tags"
+                                   options="{'color_field': 'color', 'no_create_edit': True}"/>
+                        </group>
                     </group>
+                    <notebook>
+                        <page string="Extra Info">
+                            <group>
+                                <field name="room_id" options="{'no_create_edit': True}"/>
+                                <field name="show_button_assign" attrs="{'invisible': True}"/>
+                                <button name="assign_room" type="object" string="Assign Room" attrs="{'invisible': [('show_button_assign', '=', False)]}"/>
+                                <button name="release_room" type="object" string="Release Room" attrs="{'invisible': [('show_button_assign', '=', True)]}"/>
+                            </group>
+                        </page>
+                        <page string="Cartel">
+                            <group>
+                                <field name="cartel_id"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" groups="base.group_user"/>
@@ -131,11 +136,7 @@
                 <field name="ref"/>
                 <field name="name" string="Patient Name"
                        filter_domain="['|', ('name','ilike', self), ('ref', 'ilike', self)]"/>
-                <field name="age"/>
-                <filter name="less15" string="Less than 15" domain="[('age', '&lt;', '15')]"/>
-
                 <field name="gender"/>
-
                 <filter name="filter_male" string="Male" domain="[('gender', '=', 'male')]"/>
                 <filter name="filter_female" string="Female" domain="[('gender', '=', 'female')]"/>
                 <filter name="filter_other" string="Other" domain="[('gender', '=', 'other')]"/>

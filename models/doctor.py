@@ -1,5 +1,6 @@
 from odoo import fields, models, api
 import random
+from odoo.exceptions import ValidationError
 
 class HospitalDoctor(models.Model):
     _name = 'hospital.doctor'
@@ -37,6 +38,22 @@ class HospitalDoctor(models.Model):
     room_id = fields.Many2one('hospital.room', string='Room Number')
     service_id = fields.Many2one('hospital.service', string='Service Provided')
     image = fields.Image(string='Image')
+    assigned_patient_count = fields.Integer(compute='_compute_assigned_patient_count', store=True)
+
+    @api.depends('patient_ids')
+    def _compute_assigned_patient_count(self):
+        for rec in self:
+            rec.assigned_patient_count = len(rec.patient_ids)
+            print(rec.assigned_patient_count)
+            print(rec.name)
+
+
+    @api.constrains('assigned_patient_count')
+    def _check_assigned_patient_limit(self):
+        for rec in self:
+            if rec.assigned_patient_count > 10:
+                raise ValidationError("You cannot assign more than 10 patients to a doctor.")
+
 
 
     @api.depends('name')
