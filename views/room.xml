@@ -9,7 +9,7 @@
                 <form>
                     <sheet>
                         <group>
-                            <field name="name"/>
+<!--                            <field name="name"/>-->
                             <field name="floor_location"/>
                             <field name="room_type"/>
                             <!--                            <field name="assigned_to" widget="selection"/>-->

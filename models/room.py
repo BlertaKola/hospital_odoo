@@ -1,5 +1,4 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
 
 
 class HospitalRoom(models.Model):
@@ -7,19 +6,12 @@ class HospitalRoom(models.Model):
     _description = 'Hospital Rooms'
     _inherit = 'mail.thread'
 
-
-    name = fields.Char(string='Room Number')
+    name = fields.Char(string='Room Number', compute='_compute_room_name', store=True)
     capacity = fields.Integer(string='Capacity', help='Maximum number of occupants')
     occupancy = fields.Integer(string='Occupancy', default='0')
-    room_type = fields.Selection(
-        [
+    room_type = fields.Selection([
             ('doctor_room', 'Doctor Room'),
-            ('patient_room', 'Patient Room'),
-            ('operation_room', 'Operation Room'),
-            ('examination_room', 'Examination Room'),
-            ('consultation_room', 'Consultation Room')
-        ], string='Room type'
-    )
+            ('patient_room', 'Patient Room')], string='Room type')
     status = fields.Selection(
         [
             ('available', 'Available'),
@@ -29,15 +21,10 @@ class HospitalRoom(models.Model):
         string='Status',
         compute='_compute_room_status',
     )
-
-
-
     facilities = fields.Text(string='Facilities')
     floor_location = fields.Char(string='Floor/Location')
     price = fields.Float(string='Price')
     doctor_id = fields.Many2one('hospital.doctor')
-
-
 
 
     @api.depends('capacity', 'occupancy')
@@ -50,8 +37,12 @@ class HospitalRoom(models.Model):
             elif room.occupancy >= room.capacity:
                 room.status = 'full'
 
-
-
-
-
-
+    @api.depends('room_type')
+    def _compute_room_name(self):
+        for room in self:
+            prefix = ''
+            if room.room_type == 'patient_room':
+                prefix = 'PA'
+            elif room.room_type == 'doctor_room':
+                prefix = 'DR'
+            room.name = f"{prefix}{room.id}"

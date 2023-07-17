@@ -21,20 +21,7 @@
 
                         <!--                        <field name="contact_info"/>-->
                     </group>
-                    <notebook>
-                        <page string="Patients">
-                            <group>
-                                <field name="patient_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}">
-                                    <!--                            <tree editable="bottom">-->
-                                    <!--                                <field name="patient_id"/>-->
-                                    <!--                                <field name="patient_name"/>-->
-                                    <!--&lt;!&ndash;                                <field name="doctor_id" invisible="1"/>&ndash;&gt;-->
-                                    <!--                            </tree>-->
-                                </field>
-                            </group>
 
-                        </page>
-                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" groups="base.group_user"/>

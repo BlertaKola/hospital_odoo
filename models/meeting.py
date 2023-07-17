@@ -1,7 +1,6 @@
 from odoo import fields, models, api
 from odoo.exceptions import ValidationError
 from datetime import timedelta
-from datetime import datetime
 
 
 class HospitalMeeting(models.Model):
@@ -15,10 +14,7 @@ class HospitalMeeting(models.Model):
     ], string='Meeting Subject', required=True)
     patient_id = fields.Many2one('hospital.patient', string='Patient', required=True)
     doctor_id = fields.Many2one('hospital.doctor', string='Doctor', required=True)
-
-
     doc_room = fields.Many2one(related='doctor_id.room_id', readonly=True)
-
     state = fields.Selection([
         ('draft', 'Draft'),
         ('in_progres', 'In progres'),
@@ -65,7 +61,30 @@ class HospitalMeeting(models.Model):
             else:
                 rec.ending_time = False
 
-    @api.constrains('starting_time')
+    # Some other code that I tried, but it did not cover the patient meeting conflict
+    # @api.constrains('starting_time')
+    # def _check_existing_meetings(self):
+    #     for meeting in self:
+    #         start_time = meeting.starting_time
+    #         end_time = meeting.starting_time + timedelta(hours=1)  # Assuming the meeting duration is 1 hour
+    #         domain = [
+    #             ('starting_time', '<', end_time),
+    #             ('ending_time', '>', start_time),
+    #             ('doctor_id', '=', meeting.doctor_id.id),
+    #             ('id', '!=', meeting.id)
+    #         ]
+    #         conflicting_meetings = self.search(domain)
+    #
+    #         for rec in conflicting_meetings:
+    #             if rec.state in ('draft', 'in_progress'):
+    #                 if rec.starting_time <= start_time < rec.ending_time:
+    #                     raise ValidationError(
+    #                         "This hour is already taken by another meeting. Please choose another timeslot.")
+    #                 if rec.starting_time < end_time <= rec.ending_time:
+    #                     raise ValidationError(
+    #                         "This hour is already taken by another meeting. Please choose another timeslot.")
+
+    @api.constrains('starting_time', 'patient_id')
     def _check_existing_meetings(self):
         for meeting in self:
             start_time = meeting.starting_time
@@ -73,20 +92,18 @@ class HospitalMeeting(models.Model):
             domain = [
                 ('starting_time', '<', end_time),
                 ('ending_time', '>', start_time),
-                ('doctor_id', '=', meeting.doctor_id.id),
                 ('id', '!=', meeting.id)
             ]
             conflicting_meetings = self.search(domain)
 
             for rec in conflicting_meetings:
                 if rec.state in ('draft', 'in_progress'):
-                    if rec.starting_time <= start_time < rec.ending_time:
+                    if rec.doctor_id.id == meeting.doctor_id.id:
                         raise ValidationError(
-                            "This hour is already taken by another meeting. Please choose another timeslot.")
-                    if rec.starting_time < end_time <= rec.ending_time:
+                            "This doctor already has a meeting at the given time. Please choose another timeslot.")
+                    if rec.patient_id.id == meeting.patient_id.id:
                         raise ValidationError(
-                            "This hour is already taken by another meeting. Please choose another timeslot.")
-
+                            "This patient already has a meeting at the given time. Please choose another timeslot.")
 
     def action_in_progress(self):
         for rec in self:
@@ -103,4 +120,3 @@ class HospitalMeeting(models.Model):
     def action_draft(self):
         for rec in self:
             rec.state = 'draft'
-
