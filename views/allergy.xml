@@ -59,8 +59,6 @@
                   parent="menu_hospital_medications"
                   action="allergy_act_window"
                   sequence="10"
-                  groups="hospital.group_hospital_doctor,hospital.group_hospital_administrator"
-
         />
 
     </data>

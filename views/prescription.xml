@@ -50,7 +50,5 @@
               parent="menu_hospital_medications"
               action="action_hospital_prescription"
               sequence="10"
-              groups="hospital.group_hospital_doctor,hospital.group_hospital_administrator"
-
     />
 </odoo>
